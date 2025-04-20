@@ -49,6 +49,46 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  // Download functionality for generated content
+  function downloadContent(section, format) {
+    const outputEl = document.getElementById(section + 'Output');
+    const content = outputEl.textContent.trim();
+    if (!content) {
+      alert('No content to download for ' + section);
+      return;
+    }
+    if (format === 'md') {
+      const blob = new Blob([content], { type: 'text/markdown' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${section}-output.md`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } else if (format === 'pdf') {
+      // Use jsPDF to generate PDF
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const margin = 10;
+      const maxLineWidth = pageWidth - margin * 2;
+      const lines = doc.splitTextToSize(content, maxLineWidth);
+      doc.text(lines, margin, 20);
+      doc.save(`${section}-output.pdf`);
+    }
+  }
+
+  // Handle download button clicks
+  form.querySelectorAll('.download-btn').forEach(button => {
+    button.addEventListener('click', () => {
+      const section = button.getAttribute('data-section');
+      const format = button.getAttribute('data-format');
+      downloadContent(section, format);
+    });
+  });
+
   // Modal and API settings logic
   const settingsBtn = document.getElementById('settingsBtn');
   const settingsModal = document.getElementById('settingsModal');
@@ -92,12 +132,19 @@ document.addEventListener('DOMContentLoaded', () => {
     alert('API settings saved.');
   });
 
-  // Fetch models from API endpoint dynamically
+  // Fetch models from API endpoint dynamically with console logs and error handling
   async function fetchModels() {
     const endpoint = apiEndpointInput.value.trim();
     const key = apiKeyInput.value.trim();
+    console.log('Fetch models triggered');
     if (!endpoint) {
+      console.error('API endpoint is empty');
       alert('Please enter a valid API endpoint.');
+      return;
+    }
+    if (!key) {
+      console.error('API key is empty');
+      alert('Please enter a valid API key.');
       return;
     }
     refreshModelsBtn.disabled = true;
@@ -108,7 +155,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!url.endsWith('/models')) {
         url = url.replace(/\/+$/, '') + '/models';
       }
-      console.log('Fetching models from:', url);
+      console.log('Fetching models from URL:', url);
       const response = await fetch(url, {
         headers: {
           'Authorization': `Bearer ${key}`,
@@ -116,6 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       });
       if (!response.ok) {
+        console.error('HTTP error status:', response.status);
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
@@ -127,6 +175,7 @@ document.addEventListener('DOMContentLoaded', () => {
       } else if (Array.isArray(data.data)) {
         models = data.data;
       } else {
+        console.error('Models list not found in response');
         throw new Error('Models list not found in response');
       }
       // Extract model ids or names
@@ -142,7 +191,9 @@ document.addEventListener('DOMContentLoaded', () => {
       if (apiConfig.selectedModel && modelNames.includes(apiConfig.selectedModel)) {
         modelSelect.value = apiConfig.selectedModel;
       }
+      console.log('Models loaded successfully');
     } catch (error) {
+      console.error('Failed to fetch models:', error);
       alert('Failed to fetch models: ' + error.message);
       modelSelect.innerHTML = '<option value="">No models loaded</option>';
     } finally {
