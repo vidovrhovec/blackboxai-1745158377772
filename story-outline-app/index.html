@@ -45,6 +45,10 @@
         </div>
         <button type="button" data-section="brainstorm" class="bg-indigo-600 text-white px-5 py-2 rounded-md hover:bg-indigo-700 transition shadow-md font-semibold ring-0 focus:ring-4 focus:ring-indigo-400">Generate Brainstorm Ideas</button>
         <pre id="brainstormOutput" class="mt-4 p-4 bg-white rounded-lg border border-gray-300 whitespace-pre-wrap shadow-sm min-h-[100px] font-mono text-sm leading-relaxed"></pre>
+        <div class="mt-2 flex gap-2">
+          <button type="button" data-section="brainstorm" data-format="md" class="btn-primary download-btn">Download MD</button>
+          <button type="button" data-section="brainstorm" data-format="pdf" class="btn-primary download-btn">Download PDF</button>
+        </div>
       </section>
 
       <!-- Outlining Prompts -->
@@ -72,6 +76,10 @@
         </div>
         <button type="button" data-section="outline" class="bg-indigo-600 text-white px-5 py-2 rounded-md hover:bg-indigo-700 transition shadow-md font-semibold ring-0 focus:ring-4 focus:ring-indigo-400">Generate Outline</button>
         <pre id="outlineOutput" class="mt-4 p-4 bg-white rounded-lg border border-gray-300 whitespace-pre-wrap shadow-sm min-h-[100px] font-mono text-sm leading-relaxed"></pre>
+        <div class="mt-2 flex gap-2">
+          <button type="button" data-section="outline" data-format="md" class="btn-primary download-btn">Download MD</button>
+          <button type="button" data-section="outline" data-format="pdf" class="btn-primary download-btn">Download PDF</button>
+        </div>
       </section>
 
       <!-- Setting Prompts -->
@@ -215,6 +223,7 @@
     </div>
   </div>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
