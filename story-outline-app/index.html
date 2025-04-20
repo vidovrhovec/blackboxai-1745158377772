@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AI Story Outline Creator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f9fafb;
+      color: #1f2937;
+    }
+    /* Removed @apply usage, styles replaced by Tailwind classes in markup */
+    form {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 2rem 3rem;
+    }
+  </style>
+</head>
+<body class="bg-gray-50 min-h-screen p-6">
+  <div class="max-w-7xl mx-auto p-6">
+    <h1 class="text-5xl font-extrabold mb-12 text-center text-indigo-700 drop-shadow-md flex items-center justify-center gap-4">
+      AI Story Outline Creator
+      <button id="settingsBtn" type="button" aria-label="Open API Settings" class="text-indigo-700 hover:text-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded p-1 transition" title="API Settings">
+        <i class="fas fa-cogs fa-lg"></i>
+      </button>
+    </h1>
+
+    <form id="storyForm">
+
+      <!-- Initial Brainstorming Prompts -->
+      <section class="bg-white p-6 rounded-lg shadow-lg mb-10">
+        <h2 class="text-3xl font-extrabold mb-6 border-b-2 border-indigo-500 pb-2">Initial Brainstorming Prompts</h2>
+        <div class="mb-1 grid grid-cols-1 gap-1">
+          <label for="brainstormNumber" class="block mb-2 font-semibold text-gray-800">Number of Pitches / Characters</label>
+          <input type="number" id="brainstormNumber" name="brainstormNumber" min="1" max="20" class="w-full rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition text-base" placeholder="Enter a number" required />
+        </div>
+        <div class="mb-1 grid grid-cols-1 gap-1">
+          <label for="brainstormGenre" class="block mb-2 font-semibold text-gray-800">Genre</label>
+          <input type="text" id="brainstormGenre" name="brainstormGenre" class="w-full rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition text-base" placeholder="Enter genre (e.g. fantasy, thriller)" required />
+        </div>
+        <button type="button" data-section="brainstorm" class="bg-indigo-600 text-white px-5 py-2 rounded-md hover:bg-indigo-700 transition shadow-md font-semibold ring-0 focus:ring-4 focus:ring-indigo-400">Generate Brainstorm Ideas</button>
+        <pre id="brainstormOutput" class="mt-4 p-4 bg-white rounded-lg border border-gray-300 whitespace-pre-wrap shadow-sm min-h-[100px] font-mono text-sm leading-relaxed"></pre>
+      </section>
+
+      <!-- Outlining Prompts -->
+      <section class="bg-white p-6 rounded-lg shadow-lg mb-10">
+        <h2 class="text-3xl font-extrabold mb-6 border-b-2 border-indigo-500 pb-2">Outlining Prompts</h2>
+        <div class="mb-1 grid grid-cols-1 gap-1">
+          <label for="outlineGenre" class="block mb-2 font-semibold text-gray-800">Genre</label>
+          <input type="text" id="outlineGenre" name="outlineGenre" class="w-full rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition text-base" placeholder="Enter genre" />
+        </div>
+        <div class="mb-1 grid grid-cols-1 gap-1">
+          <label for="outlinePitch" class="block mb-2 font-semibold text-gray-800">Paste Pitch</label>
+          <textarea id="outlinePitch" name="outlinePitch" rows="3" class="w-full rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition text-base" placeholder="Paste pitch here"></textarea>
+        </div>
+        <div class="mb-1 grid grid-cols-1 gap-1">
+          <label for="outlineMethod" class="block mb-2 font-semibold text-gray-800">Outline Method of Choice</label>
+          <input type="text" id="outlineMethod" name="outlineMethod" class="w-full rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition text-base" placeholder="e.g. three-act, hero's journey" />
+        </div>
+        <div class="mb-1 grid grid-cols-1 gap-1">
+          <label for="outlineSynopsis" class="block mb-2 font-semibold text-gray-800">Insert Synopsis</label>
+          <textarea id="outlineSynopsis" name="outlineSynopsis" rows="3" class="w-full rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition text-base" placeholder="Insert synopsis here"></textarea>
+        </div>
+        <div class="mb-1 grid grid-cols-1 gap-1">
+          <label for="outlineChaptersNumber" class="block mb-2 font-semibold text-gray-800">Number of Chapters</label>
+          <input type="number" id="outlineChaptersNumber" name="outlineChaptersNumber" min="1" max="50" class="w-full rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition text-base" placeholder="Enter number of chapters" />
+        </div>
+        <button type="button" data-section="outline" class="bg-indigo-600 text-white px-5 py-2 rounded-md hover:bg-indigo-700 transition shadow-md font-semibold ring-0 focus:ring-4 focus:ring-indigo-400">Generate Outline</button>
+        <pre id="outlineOutput" class="mt-4 p-4 bg-white rounded-lg border border-gray-300 whitespace-pre-wrap shadow-sm min-h-[100px] font-mono text-sm leading-relaxed"></pre>
+      </section>
+
+      <!-- Setting Prompts -->
+      <section class="bg-white p-6 rounded-lg shadow-lg mb-10">
+        <h2 class="text-3xl font-extrabold mb-6 border-b-2 border-indigo-500 pb-2">Setting Prompts</h2>
+        <div class="mb-1 grid grid-cols-1 gap-1">
+          <label for="settingSynopsis" class="block mb-2 font-semibold text-gray-800">Insert Synopsis</label>
+          <textarea id="settingSynopsis" name="settingSynopsis" rows="3" class="w-full rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition text-base" placeholder="Insert synopsis here"></textarea>
+        </div>
+        <button type="button" data-section="setting" class="bg-indigo-600 text-white px-5 py-2 rounded-md hover:bg-indigo-700 transition shadow-md font-semibold ring-0 focus:ring-4 focus:ring-indigo-400">Generate Setting Ideas</button>
+        <pre id="settingOutput" class="mt-4 p-4 bg-white rounded-lg border border-gray-300 whitespace-pre-wrap shadow-sm min-h-[100px] font-mono text-sm leading-relaxed"></pre>
+      </section>
+
+      <!-- Character Prompts -->
+      <section class="bg-white p-6 rounded-lg shadow-lg mb-10">
+        <h2 class="text-3xl font-extrabold mb-6 border-b-2 border-indigo-500 pb-2">Character Prompts</h2>
+        <div class="mb-0 grid grid-cols-1 gap-1">
+          <label for="characterSummary" class="block mb-2 font-semibold text-gray-800">Brief Summary</label>
+          <textarea id="characterSummary" name="characterSummary" rows="3" class="w-full rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition text-base" placeholder="Brief summary here"></textarea>
+        </div>
+        <button type="button" data-section="character" class="bg-indigo-600 text-white px-5 py-2 rounded-md hover:bg-indigo-700 transition shadow-md font-semibold ring-0 focus:ring-4 focus:ring-indigo-400">Generate Character Ideas</button>
+        <pre id="characterOutput" class="mt-4 p-4 bg-white rounded-lg border border-gray-300 whitespace-pre-wrap shadow-sm min-h-[100px] font-mono text-sm leading-relaxed"></pre>
+      </section>
+
+      <!-- Writing Prompts -->
+      <section class="bg-white p-6 rounded-lg shadow-lg mb-10">
+        <h2 class="text-3xl font-extrabold mb-6 border-b-2 border-indigo-500 pb-2">Writing Prompts</h2>
+        <div class="mb-1 grid grid-cols-1 gap-1">
+          <label for="writingGenre" class="block mb-2 font-semibold text-gray-800">Genre</label>
+          <input type="text" id="writingGenre" name="writingGenre" class="w-full rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition text-base" placeholder="Enter genre" />
+        </div>
+        <div class="mb-1 grid grid-cols-1 gap-1">
+          <label for="writingTone" class="block mb-2 font-semibold text-gray-800">Tone</label>
+          <input type="text" id="writingTone" name="writingTone" class="w-full rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition text-base" placeholder="Enter tone" />
+        </div>
+        <div class="mb-1 grid grid-cols-1 gap-1">
+          <label for="writingPOV" class="block mb-2 font-semibold text-gray-800">Point of View / Tense</label>
+          <input type="text" id="writingPOV" name="writingPOV" class="w-full rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition text-base" placeholder="Enter POV / tense" />
+        </div>
+        <div class="mb-1 grid grid-cols-1 gap-1">
+          <label for="writingSetting" class="block mb-2 font-semibold text-gray-800">Setting</label>
+          <input type="text" id="writingSetting" name="writingSetting" class="w-full rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition text-base" placeholder="Enter setting" />
+        </div>
+        <div class="mb-1 grid grid-cols-1 gap-1">
+          <label for="writingCharacters" class="block mb-2 font-semibold text-gray-800">Key Characters</label>
+          <textarea id="writingCharacters" name="writingCharacters" rows="2" class="w-full rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition text-base" placeholder="Enter character details"></textarea>
+        </div>
+        <div class="mb-1 grid grid-cols-1 gap-1">
+          <label for="writingSummary" class="block mb-2 font-semibold text-gray-800">Summary</label>
+          <textarea id="writingSummary" name="writingSummary" rows="3" class="w-full rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition text-base" placeholder="Enter your summary"></textarea>
+        </div>
+        <div class="mb-1 grid grid-cols-1 gap-1">
+          <label for="writingConflict" class="block mb-2 font-semibold text-gray-800">Main Source of Conflict</label>
+          <input type="text" id="writingConflict" name="writingConflict" class="w-full rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition text-base" placeholder="Enter main conflict" />
+        </div>
+        <button type="button" data-section="writing" class="bg-indigo-600 text-white px-5 py-2 rounded-md hover:bg-indigo-700 transition shadow-md font-semibold ring-0 focus:ring-4 focus:ring-indigo-400">Generate Writing Sample</button>
+        <pre id="writingOutput" class="mt-4 p-4 bg-white rounded-lg border border-gray-300 whitespace-pre-wrap shadow-sm min-h-[100px] font-mono text-sm leading-relaxed"></pre>
+      </section>
+
+      <!-- Editing Prompts -->
+      <section class="bg-white p-6 rounded-lg shadow-lg mb-10">
+        <h2 class="text-3xl font-extrabold mb-6 border-b-2 border-indigo-500 pb-2">Editing Prompts</h2>
+        <div class="mb-1 grid grid-cols-1 gap-1">
+          <label for="editingGenre" class="block mb-2 font-semibold text-gray-800">Genre</label>
+          <input type="text" id="editingGenre" name="editingGenre" class="w-full rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition text-base" placeholder="Enter genre" />
+        </div>
+        <div class="mb-1 grid grid-cols-1 gap-1">
+          <label for="editingScene" class="block mb-2 font-semibold text-gray-800">Insert Scene</label>
+          <textarea id="editingScene" name="editingScene" rows="4" class="w-full rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition text-base" placeholder="Insert scene here"></textarea>
+        </div>
+        <div class="mb-1 grid grid-cols-1 gap-1">
+          <label for="editingParagraph" class="block mb-2 font-semibold text-gray-800">Insert Paragraph</label>
+          <textarea id="editingParagraph" name="editingParagraph" rows="3" class="w-full rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition text-base" placeholder="Insert paragraph here"></textarea>
+        </div>
+        <div class="mb-1 grid grid-cols-1 gap-1">
+          <label for="editingText" class="block mb-2 font-semibold text-gray-800">Insert Text</label>
+          <textarea id="editingText" name="editingText" rows="3" class="w-full rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition text-base" placeholder="Insert text here"></textarea>
+        </div>
+        <div class="mb-1 grid grid-cols-1 gap-1">
+          <label for="editingStyleGuide" class="block mb-2 font-semibold text-gray-800">Style Guide</label>
+          <input type="text" id="editingStyleGuide" name="editingStyleGuide" class="w-full rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition text-base" placeholder="Enter style guide" />
+        </div>
+        <button type="button" data-section="editing" class="bg-indigo-600 text-white px-5 py-2 rounded-md hover:bg-indigo-700 transition shadow-md font-semibold ring-0 focus:ring-4 focus:ring-indigo-400">Generate Editing Suggestions</button>
+        <pre id="editingOutput" class="mt-4 p-4 bg-white rounded-lg border border-gray-300 whitespace-pre-wrap shadow-sm min-h-[100px] font-mono text-sm leading-relaxed"></pre>
+      </section>
+
+      <!-- Title/Description Prompts -->
+      <section class="bg-white p-6 rounded-lg shadow-lg mb-10">
+        <h2 class="text-3xl font-extrabold mb-6 border-b-2 border-indigo-500 pb-2">Title / Description Prompts</h2>
+        <div class="mb-0 grid grid-cols-1 gap-1">
+          <label for="titlePitchTheme" class="block mb-2 font-semibold text-gray-800">Pitch / Theme</label>
+          <textarea id="titlePitchTheme" name="titlePitchTheme" rows="3" class="w-full rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition text-base" placeholder="Insert pitch or theme"></textarea>
+        </div>
+        <div class="mb-1 grid grid-cols-1 gap-1">
+          <label for="titleGenre" class="block mb-2 font-semibold text-gray-800">Genre</label>
+          <input type="text" id="titleGenre" name="titleGenre" class="w-full rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition text-base" placeholder="Enter genre" />
+        </div>
+        <div class="mb-1 grid grid-cols-1 gap-1">
+          <label for="titleDescription" class="block mb-2 font-semibold text-gray-800">Current Description</label>
+          <textarea id="titleDescription" name="titleDescription" rows="3" class="w-full rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition text-base" placeholder="Insert current description"></textarea>
+        </div>
+        <button type="button" data-section="title" class="bg-indigo-600 text-white px-5 py-2 rounded-md hover:bg-indigo-700 transition shadow-md font-semibold ring-0 focus:ring-4 focus:ring-indigo-400">Generate Titles / Descriptions</button>
+        <pre id="titleOutput" class="mt-4 p-4 bg-white rounded-lg border border-gray-300 whitespace-pre-wrap shadow-sm min-h-[100px] font-mono text-sm leading-relaxed"></pre>
+      </section>
+
+     </form>
+  </div>
+
+  <!-- Modal for API Settings -->
+  <div id="settingsModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300">
+    <div class="bg-white rounded-lg shadow-lg max-w-md w-full p-6 relative">
+      <button id="closeModalBtn" aria-label="Close API Settings" class="absolute top-3 right-3 text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded">
+        <i class="fas fa-times fa-lg"></i>
+      </button>
+      <h2 class="text-2xl font-bold mb-4 text-indigo-700">API Settings</h2>
+      <form id="apiSettingsForm" class="space-y-4">
+        <div>
+          <label for="apiEndpoint" class="block font-semibold mb-1 text-gray-800">API Endpoint</label>
+          <input type="url" id="apiEndpoint" name="apiEndpoint" placeholder="https://api.example.com/v1" class="w-full rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition text-base" required />
+        </div>
+        <div>
+          <label for="apiKey" class="block font-semibold mb-1 text-gray-800">API Key</label>
+          <input type="password" id="apiKey" name="apiKey" placeholder="Enter your API key" class="w-full rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition text-base" required />
+        </div>
+        <div>
+          <label for="modelSelect" class="block font-semibold mb-1 text-gray-800">Select Model</label>
+          <div class="flex gap-2">
+            <select id="modelSelect" name="modelSelect" class="w-full rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition text-base" aria-label="Select AI Model">
+              <option value="">No models loaded</option>
+            </select>
+            <button type="button" id="refreshModelsBtn" class="bg-indigo-600 text-white px-3 py-1 rounded-md hover:bg-indigo-700 transition shadow-md font-semibold ring-0 focus:ring-4 focus:ring-indigo-400 text-sm" title="Refresh Models">
+              <i class="fas fa-sync-alt"></i>
+            </button>
+          </div>
+        </div>
+        <div class="pt-4 flex justify-end gap-3">
+          <button type="submit" class="bg-indigo-600 text-white px-5 py-2 rounded-md hover:bg-indigo-700 transition shadow-md font-semibold ring-0 focus:ring-4 focus:ring-indigo-400">Save Settings</button>
+          <button type="button" id="cancelSettingsBtn" class="bg-gray-400 hover:bg-gray-500 text-white px-5 py-2 rounded-md transition shadow-md font-semibold ring-0 focus:ring-4 focus:ring-gray-400">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
